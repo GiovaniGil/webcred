@@ -17,10 +17,11 @@ return [
     'modules' => [],
     'components' => [
         'request' => [
+            'cookieValidationKey' => 'GhBJJYHCfk',
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'common\models\Admin',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],

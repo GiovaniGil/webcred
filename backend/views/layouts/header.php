@@ -237,7 +237,12 @@ use yii\helpers\Html;
                       <a href="#" class="btn btn-default btn-flat">Profile</a>
                     </div>
                     <div class="pull-right">
-                      <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                      <a href="<?= \yii\helpers\Url::to(['site/logout'])?>" data-method="post" class="btn btn-default btn-flat">Sign out</a>
+                      <?= Html::a('<i class="fa fa-sign-out"></i>',
+                          ['site/logout'],
+                          ['class'=>'btn btn-default btn-flat'], //optional* -if you need to add style
+                      ['data' => ['method' => 'post',]]);
+        ?>
                     </div>
                   </li>
                 </ul>
