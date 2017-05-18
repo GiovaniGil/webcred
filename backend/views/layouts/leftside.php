@@ -35,7 +35,7 @@ use yii\helpers\Url;
                     'options' => ['class' => 'sidebar-menu'],
                     'items' => [
                         ['label' => 'Menu', 'options' => ['class' => 'header']],
-                        ['label' => 'Dashboard', 'icon' => 'fa fa-dashboard', 
+                        ['label' => 'Dashboard', 'icon' => 'fa fa-dashboard',
                             'url' => ['/'], 'active' => $this->context->route == 'site/index'
                         ],
                         [
@@ -61,7 +61,7 @@ use yii\helpers\Url;
                             'label' => 'Users',
                             'icon' => 'fa fa-users',
                             'url' => ['/user'],
-                            'active' => $this->context->route == 'user/index',
+                            'active' => $this->context->route == 'site/user',
                         ],
                         ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
                         ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
@@ -69,7 +69,7 @@ use yii\helpers\Url;
                 ]
         )
         ?>
-        
+
     </section>
     <!-- /.sidebar -->
 </aside>

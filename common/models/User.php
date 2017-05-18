@@ -25,7 +25,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
+    public $confirm_password;
 
     /**
      * @inheritdoc
@@ -51,9 +51,19 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            [['username','email','password_hash', 'confirm_password'], 'required'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['password_hash'],  'string'],
+            [['username'],  'string'],
+            [['email'],  'string'],
+            ['confirm_password', 'confirmPassword']
         ];
+    }
+
+    public function confirmPassword($attribute, $params){
+        if($this->confirm_password != $this->password_hash)
+            $this->addError($attribute, 'A senha deve ser igual na confirmação.');
     }
 
     /**
@@ -161,6 +171,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function setPassword($password)
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    public function setConfirmPassword($password)
+    {
+        $this->confirm_password = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
