@@ -17,7 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Customer', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="fa fa-folder-open" aria-hidden="true"></i> Importar Planilha', ['create'], ['class' => 'btn btn-default']) ?>
     </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
