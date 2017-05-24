@@ -10,6 +10,9 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'aliases' => [
+        '@adminlte/widgets'=>'@vendor/adminlte/yii2-widgets'
+    ],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [

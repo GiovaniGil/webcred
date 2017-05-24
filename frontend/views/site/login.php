@@ -6,34 +6,51 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
-
     <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+        <div class="login-box">
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+            <div class="col-md-12 box box-radius">
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <div class="col-md-12" style="text-align: center">
+                    <h2>Usuário</h2>
+                </div>
+
+                <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+
+                <?= $form->field($model, 'username', ['template' => '
+                        <div class="col-sm-12" style="margin-top:15px;">
+                            <div class="input-group col-sm-12">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                {input}
+                            </div>{error}{hint}
+                        </div>'])->textInput(['autofocus' => true])
+                    ->input('text', ['placeholder'=>'Username']) ?>
+
+                <?= $form->field($model, 'password', ['template' => '
+                        <div class="col-sm-12" style="margin-top:15px;">
+                            <div class="input-group col-sm-12">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </span>
+                                {input}
+                            </div>{error}{hint}
+                        </div>'])->passwordInput()
+                    ->input('password', ['placeholder'=>'Password'])?>
 
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div style="color:#999;margin:1em 0">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                </div>
 
                 <div class="form-group">
                     <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
 
-            <?php ActiveForm::end(); ?>
+                <?php ActiveForm::end(); ?>
+            </div>
         </div>
     </div>
 </div>
