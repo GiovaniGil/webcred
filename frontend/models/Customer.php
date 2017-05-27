@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property date $birthday
  * @property integer $document
  * @property string $agency
  * @property string $registry
@@ -42,7 +43,8 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'birthday'], 'required'],
+            [['birthday'], 'date'],
             [['document'], 'integer'],
             [['observation'], 'string'],
             [['name', 'agency', 'registry', 'address', 'complement', 'zip_code', 'neighbourhood', 'city', 'state', 'phone1', 'phone2', 'phone3', 'mail', 'customer_password', 'telemarketing'], 'string', 'max' => 255],
@@ -57,6 +59,7 @@ class Customer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'birthday' => 'Birthday',
             'document' => 'Document',
             'agency' => 'Agency',
             'registry' => 'Registry',
@@ -74,5 +77,10 @@ class Customer extends \yii\db\ActiveRecord
             'observation' => 'Observation',
             'telemarketing' => 'Telemarketing',
         ];
+    }
+
+    public static function findByDocument($document){
+        $model = Customer::find()->where(['document'=>$document])->one();
+        return $model;
     }
 }

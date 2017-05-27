@@ -1,9 +1,7 @@
 <?php
 namespace frontend\controllers;
 
-use frontend\models\Customer;
-use ruskid\csvimporter\CSVReader;
-use ruskid\csvimporter\MultipleImportStrategy;
+
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -13,9 +11,8 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use ruskid\csvimporter\CSVImporter;
+
 
 /**
  * Site controller
@@ -68,7 +65,7 @@ class SiteController extends Controller
             ],
         ];
     }
-
+    
     /**
      * Displays homepage.
      *
@@ -76,33 +73,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
-        /*$importer = new CSVImporter;
-        $importer->setData(new CSVReader([
-            'filename' => Yii::$app->basePath."/controllers/teste.csv",
-            'fgetcsvOptions' => [
-                'delimiter' => ';'
-            ]
-        ]));
-
-        //Import multiple (Fast but not reliable). Will return number of inserted rows
-        $numberRowsAffected = $importer->import(new MultipleImportStrategy([
-            'tableName' => Customer::tableName(),
-            'configs' => [
-                [
-                    'attribute' => 'name',
-                    'value' => function($line) {
-                        return $line[1];
-                    },
-                    'unique' => true, //Will filter and import unique values only. can by applied for 1+ attributes
-                ]
-            ],
-            'skipImport' => function($line){
-                if(empty($line[1]) || $line[0] == ""){
-                    return true;
-                }
-            }
-        ]));*/
         return $this->render('index');
     }
 
@@ -114,7 +84,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
         $this->layout = 'login';
-        
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

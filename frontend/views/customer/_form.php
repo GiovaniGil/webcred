@@ -7,9 +7,6 @@ use yii\widgets\ActiveForm;
 /* @var $model frontend\models\Customer */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/jquery.datetimepicker.css" rel="stylesheet" type="text/css"/>
--->
 
 <div class="customer-form">
 
@@ -17,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'birthday')->textInput(['type' => 'date']) ?>
+    <?= $form->field($model, 'birthday')->textInput(['type' => 'date', 'value' => Yii::$app->formatter->asDatetime($model->birthday, DATE)]) ?>
 
     <?= $form->field($model, 'document')->textInput() ?>
 
@@ -58,7 +55,8 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
-<script>
+<?php
+$script = <<< JS
 
     $(document).ready(function(){
         jQuery.datetimepicker.setLocale('pt-BR');
@@ -69,4 +67,6 @@ use yii\widgets\ActiveForm;
         });
     });
 
-</script>
+JS;
+$this->registerJs($script);
+?>
