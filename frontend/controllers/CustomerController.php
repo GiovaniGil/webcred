@@ -202,7 +202,7 @@ class CustomerController extends Controller
                         [
                             'attribute' => 'zip_code',
                             'value' => function ($line) {
-                                return utf8_encode($line[7]);
+                                return preg_replace('/[^0-9]/', '', utf8_encode($line[7]));
                             },
                         ],
                         //neighbourhood

@@ -16,7 +16,8 @@ class AdminLteAsset extends AssetBundle
         'css/AdminLTE.min.css',
         'css/skins/_all-skins.min.css',
         'css/style.css',
-        'plugins/datetimepicker/jquery.datetimepicker.css',
+        //'plugins/datetimepicker/jquery.datetimepicker.css',
+        'plugins/datepicker/datepicker3.css',
     ];
     public $js = [
         'plugins/fastclick/fastclick.min.js',
@@ -26,7 +27,9 @@ class AdminLteAsset extends AssetBundle
         'plugins/jvectormap/jquery-jvectormap-world-mill-en.js',
         'plugins/slimScroll/jquery.slimscroll.min.js',
         'plugins/chartjs/Chart.min.js',
-        'plugins/datetimepicker/jquery.datetimepicker.full.js',
+        'plugins/datepicker/bootstrap-datepicker.js',
+        'plugins/datepicker/locales/bootstrap-datepicker.pt-BR.js',
+        //'plugins/datetimepicker/jquery.datetimepicker.full.js',
         //'js/pages/dashboard2.js',
     ];
     public $depends = [
