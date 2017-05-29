@@ -19,14 +19,14 @@ use yii\helpers\Url;
             </div>
         </div>
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
+       <!-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search...">
                 <span class="input-group-btn">
                     <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
                 </span>
             </div>
-        </form>
+        </form>-->
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <?=
@@ -35,35 +35,35 @@ use yii\helpers\Url;
                     'options' => ['class' => 'sidebar-menu'],
                     'items' => [
                         ['label' => 'Menu', 'options' => ['class' => 'header']],
-                        ['label' => 'Dashboard', 'icon' => 'fa fa-dashboard',
+                        /*['label' => 'Dashboard', 'icon' => 'fa fa-dashboard',
                             'url' => ['/'], 'active' => $this->context->route == 'site/index'
-                        ],
-                        [
-                            'label' => 'Master',
-                            'icon' => 'fa fa-database',
-                            'url' => '#',
-                            'items' => [
-                                [
-                                    'label' => 'Master1',
-                                    'icon' => 'fa fa-database',
-                                    'url' => '?r=master1/',
-				    'active' => $this->context->route == 'master1/index'
-                                ],
-                                [
-                                    'label' => 'Master2',
-                                    'icon' => 'fa fa-database',
-                                    'url' => '?r=master2/',
-				    'active' => $this->context->route == 'master2/index'
-                                ]
-                            ]
-                        ],
+                        ],*/
+//                        [
+//                            'label' => 'Master',
+//                            'icon' => 'fa fa-database',
+//                            'url' => '#',
+//                            'items' => [
+//                                [
+//                                    'label' => 'Master1',
+//                                    'icon' => 'fa fa-database',
+//                                    'url' => '?r=master1/',
+//				    'active' => $this->context->route == 'master1/index'
+//                                ],
+//                                [
+//                                    'label' => 'Master2',
+//                                    'icon' => 'fa fa-database',
+//                                    'url' => '?r=master2/',
+//				    'active' => $this->context->route == 'master2/index'
+//                                ]
+//                            ]
+//                        ],
                         [
                             'label' => 'Users',
                             'icon' => 'fa fa-users',
                             'url' => ['/user'],
                             'active' => $this->context->route == 'site/user',
                         ],
-                        ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
+                       /* ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],*/
                         ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
                     ],
                 ]

@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use asinfotrack\yii2\audittrail\behaviors\AuditTrailBehavior;
 use Yii;
 
 /**
@@ -44,7 +45,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'birthday'], 'required'],
-            [['birthday'], 'date'],
+            [['birthday'], 'safe'],
             [['document'], 'integer'],
             [['observation'], 'string'],
             [['name', 'agency', 'registry', 'address', 'complement', 'zip_code', 'neighbourhood', 'city', 'state', 'phone1', 'phone2', 'phone3', 'mail', 'customer_password', 'telemarketing'], 'string', 'max' => 255],
@@ -78,6 +79,29 @@ class Customer extends \yii\db\ActiveRecord
             'telemarketing' => 'Telemarketing',
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            // ...
+            'audittrail'=>[
+                'class'=>AuditTrailBehavior::className(),
+
+                // some of the optional configurations
+                'ignoredAttributes'=>['created_at','updated_at'],
+                'consoleUserId'=>1,
+                'attributeOutput'=>[
+                    'id'=>function ($value) {
+                        $model = Customer::findOne($value);
+                        return sprintf('%s %s', $model->name, $model->birthday);
+                    },
+                    'last_checked'=>'datetime',
+                ],
+            ],
+            // ...
+        ];
+    }
+
 
     public static function findByDocument($document){
         $model = Customer::find()->where(['document'=>$document])->one();

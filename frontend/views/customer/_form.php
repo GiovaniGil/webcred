@@ -35,9 +35,9 @@ use yii\widgets\ActiveForm;
                             </div>
                             {input}
                         </div>
-                    </div>'
+                    </div>{hint}{error}'
                 ])->widget(\yii\widgets\MaskedInput::className(), array("mask" => "99/99/9999",
-                    'options' => ['value' => Yii::$app->formatter->asDatetime($model->birthday, DATE), 'class' => 'form-control'])); ?>
+                    'options' => ['value' => Yii::$app->formatter->asDate($model->birthday, DATE), 'class' => 'form-control'])); ?>
             </div>
         </div>
 

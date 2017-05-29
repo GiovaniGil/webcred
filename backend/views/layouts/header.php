@@ -3,7 +3,7 @@ use yii\helpers\Html;
 ?>
 <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="index.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b><?=$title?></b></span>
           <!-- logo for regular state and mobile devices -->
@@ -18,7 +18,7 @@ use yii\helpers\Html;
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <!-- Messages: style can be found in dropdown.less-->
-              <li class="dropdown messages-menu">
+              <!--<li class="dropdown messages-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-envelope-o"></i>
                   <span class="label label-success">4</span>
@@ -26,12 +26,11 @@ use yii\helpers\Html;
                 <ul class="dropdown-menu">
                   <li class="header">You have 4 messages</li>
                   <li>
-                    <!-- inner menu: contains the actual data -->
                     <ul class="menu">
-                      <li><!-- start message -->
+                      <li>
                         <a href="#">
                           <div class="pull-left">
-                            <?= Html::img('@web/img/user2-160x160.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
+                            <?/*= Html::img('@web/img/user2-160x160.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) */?>
                           </div>
                           <h4>
                             Support Team
@@ -39,11 +38,11 @@ use yii\helpers\Html;
                           </h4>
                           <p>Why not buy a new awesome theme?</p>
                         </a>
-                      </li><!-- end message -->
+                      </li>
                       <li>
                         <a href="#">
                           <div class="pull-left">
-                            <?= Html::img('@web/img/user3-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
+                            <?/*= Html::img('@web/img/user3-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) */?>
                           </div>
                           <h4>
                             AdminLTE Design Team
@@ -55,7 +54,7 @@ use yii\helpers\Html;
                       <li>
                         <a href="#">
                           <div class="pull-left">
-                            <?= Html::img('@web/img/user4-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
+                            <?/*= Html::img('@web/img/user4-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) */?>
                           </div>
                           <h4>
                             Developers
@@ -67,7 +66,7 @@ use yii\helpers\Html;
                       <li>
                         <a href="#">
                           <div class="pull-left">
-                            <?= Html::img('@web/img/user3-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
+                            <?/*= Html::img('@web/img/user3-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) */?>
                           </div>
                           <h4>
                             Sales Department
@@ -79,7 +78,7 @@ use yii\helpers\Html;
                       <li>
                         <a href="#">
                           <div class="pull-left">
-                            <?= Html::img('@web/img/user4-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
+                            <?/*= Html::img('@web/img/user4-128x128.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) */?>
                           </div>
                           <h4>
                             Reviewers
@@ -92,9 +91,9 @@ use yii\helpers\Html;
                   </li>
                   <li class="footer"><a href="#">See All Messages</a></li>
                 </ul>
-              </li>
+              </li>-->
               <!-- Notifications: style can be found in dropdown.less -->
-              <li class="dropdown notifications-menu">
+           <!--   <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-bell-o"></i>
                   <span class="label label-warning">10</span>
@@ -102,7 +101,6 @@ use yii\helpers\Html;
                 <ul class="dropdown-menu">
                   <li class="header">You have 10 notifications</li>
                   <li>
-                    <!-- inner menu: contains the actual data -->
                     <ul class="menu">
                       <li>
                         <a href="#">
@@ -133,8 +131,8 @@ use yii\helpers\Html;
                   </li>
                   <li class="footer"><a href="#">View all</a></li>
                 </ul>
-              </li>
-              <!-- Tasks: style can be found in dropdown.less -->
+              </li>-->
+
               <li class="dropdown tasks-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-flag-o"></i>
@@ -220,7 +218,7 @@ use yii\helpers\Html;
                     </p>
                   </li>
                   <!-- Menu Body -->
-                  <li class="user-body">
+                  <!--<li class="user-body">
                     <div class="col-xs-4 text-center">
                       <a href="#">Followers</a>
                     </div>
@@ -230,19 +228,17 @@ use yii\helpers\Html;
                     <div class="col-xs-4 text-center">
                       <a href="#">Friends</a>
                     </div>
-                  </li>
+                  </li>-->
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
                       <a href="#" class="btn btn-default btn-flat">Profile</a>
                     </div>
                     <div class="pull-right">
-                      <a href="<?= \yii\helpers\Url::to(['site/logout'])?>" data-method="post" class="btn btn-default btn-flat">Sign out</a>
-                      <?= Html::a('<i class="fa fa-sign-out"></i>',
+                      <?= Html::a('Sair '.'<i class="fa fa-sign-out"></i>',
                           ['site/logout'],
-                          ['class'=>'btn btn-default btn-flat'], //optional* -if you need to add style
-                      ['data' => ['method' => 'post',]]);
-        ?>
+                          ['class'=>'btn btn-default btn-flat', //optional* -if you need to add style
+                              'data' => ['method' => 'post',]]); ?>
                     </div>
                   </li>
                 </ul>

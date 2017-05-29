@@ -71,13 +71,21 @@ class CustomerController extends Controller
     {
         $model = new Customer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post()) ) {
+
+            $model->birthday = implode("-", array_reverse(explode("/", $model->birthday)));
+            $model->phone1 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone1));
+            $model->phone2 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone2));
+            $model->phone3 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone3));
+            $model->zip_code = preg_replace('/[^0-9]/', '',utf8_encode($model->zip_code));
+
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+
     }
 
     /**
@@ -90,13 +98,20 @@ class CustomerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->birthday = implode("-", array_reverse(explode("/", $model->birthday)));
+            $model->phone1 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone1));
+            $model->phone2 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone2));
+            $model->phone3 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone3));
+            $model->zip_code = preg_replace('/[^0-9]/', '',utf8_encode($model->zip_code));
+            
+            if ($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -145,8 +160,9 @@ class CustomerController extends Controller
                 ]));
 
                 //Import multiple (Fast but not reliable). Will return number of inserted rows
-                $numberRowsAffected = $importer->import(new MultipleImportStrategy([
+                $numberRowsAffected = $importer->importByReflection(new MultipleImportStrategy([
                     'tableName' => Customer::tableName(),
+                    'className' => Customer::className(),
                     'configs' => [
                         //name
                         [
@@ -280,7 +296,7 @@ class CustomerController extends Controller
                         if (empty($line[0]) || $line[0] == "") {
                             return true;
                         }
-                        
+
                         if (!empty($line[1])) {
                             $model = Customer::findByDocument($line[1]);
                             if($model)
