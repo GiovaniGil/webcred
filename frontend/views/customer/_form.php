@@ -146,6 +146,12 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="row">
             <div class="col-sm-4">
+                <?= $form->field($model, 'folder')->textInput(['maxlength' => true]) ?>
+                <input type="file" webkitdirectory directory/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
                 <?= $form->field($model, 'telemarketing')->textInput(['maxlength' => true]) ?>
             </div>
         </div>

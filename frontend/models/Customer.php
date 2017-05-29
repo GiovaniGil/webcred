@@ -27,6 +27,7 @@ use Yii;
  * @property string $customer_password
  * @property string $observation
  * @property string $telemarketing
+ * @property string $folder
  */
 class Customer extends \yii\db\ActiveRecord
 {
@@ -48,6 +49,7 @@ class Customer extends \yii\db\ActiveRecord
             [['birthday'], 'safe'],
             [['document'], 'integer'],
             [['observation'], 'string'],
+            [['folder'], 'string'],
             [['name', 'agency', 'registry', 'address', 'complement', 'zip_code', 'neighbourhood', 'city', 'state', 'phone1', 'phone2', 'phone3', 'mail', 'customer_password', 'telemarketing'], 'string', 'max' => 255],
         ];
     }
@@ -77,6 +79,7 @@ class Customer extends \yii\db\ActiveRecord
             'customer_password' => 'Customer Password',
             'observation' => 'Observation',
             'telemarketing' => 'Telemarketing',
+            'folder' => 'Folder',
         ];
     }
 
