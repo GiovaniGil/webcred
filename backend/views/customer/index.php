@@ -3,6 +3,7 @@
 use yii\bootstrap\Alert;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
@@ -22,61 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="fix" id="loading-img"><i class="fa fa-5x fa-circle-o-notch fa-spin"></i></i></div>
     </div>
 
-    <?PHP
-
-    echo Alert::widget([
-            'options' => [
-            'class' => 'alert-success',
-            'style' => 'display:none',
-            'id' => 'sheet-imported'
-        ],
-        'body' => '<div id="alert-text">...</div>',
-    ]);
-
-    echo Alert::widget([
-            'options' => [
-            'class' => 'alert-danger',
-            'style' => 'display:none',
-            'id' => 'sheet-danger'
-        ],
-        'body' => '<div id="alert-danger">...</div>',
-    ]);
-
-    ?>
-    <p>
-    <div class="row">
-        <div class="col-lg-3 col-sm-3 col-6">
-            <?= Html::a('Create Customer', ['create'], ['class' => 'btn btn-success']) ?>
-
-        </div>
-        <?php $form = ActiveForm::begin(['id' => 'formSheet',
-            'action' =>  urldecode(Yii::$app->urlManager->createUrl(['customer/import-sheet'])),
-            'options' => ['method' => 'POST','enctype' => 'multipart/form-data']]) ?>
-
-        <div class="col-lg-3 col-sm-3 col-6 col-sm-offset-5">
-            <div class="input-group">
-                <label class="input-group-btn">
-                    <span class="btn btn-primary" style="height: inherit;">
-                        Planilha&hellip; <input type="file" accept=".csv" id="excelSheet" name="excelSheet" style="display: none;" multiple>
-                    </span>
-                </label>
-                <input type="text" id="excelSheetTxt" class="form-control" readonly>
-                <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Importar',
-                    ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
-                </div>
-        </div>
-    </div>
-    <?php ActiveForm::end(); ?>
-
-    </p>
-
     <?php Pjax::begin(['id' => 'pjax-grid-view']); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            //'id',
             'name',
             [
                 'attribute' => 'birthday',
@@ -98,7 +50,15 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'observation:ntext',
             // 'telemarketing',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view}',
+                'buttons'  => [
+                    'view'   => function ($url, $model) {
+                        $url = Url::to(['customer/view', 'id' => $model->id]);
+                        return Html::a('<span class="fa fa-eye"></span>', $url, ['title' => 'view']);
+                    },
+                ]
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

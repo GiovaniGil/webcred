@@ -53,15 +53,3 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
-<?= AuditTrail::widget([
-    'model'=>$model,
-
-    // some of the optional configurations
-    'userIdCallback'=>function ($userId, $model) {
-        return User::findOne($userId)->username;
-    },
-    'changeTypeCallback'=>function ($type, $model) {
-        return Html::tag('span', strtoupper($type), ['class'=>'label label-info']);
-    },
-    'dataTableOptions'=>['class'=>'table table-condensed table-bordered'],
-]) ?>

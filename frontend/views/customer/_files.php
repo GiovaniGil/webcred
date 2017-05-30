@@ -6,37 +6,42 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 ?>
-    <div class="row">
-        <div class="col-sm-4">
-            <?= $form->field($model, 'folder')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-sm-4">
-                <label>Upload</label>
-                <div class="input-group">
-                    <label class="input-group-btn">
+
+    <section class="content">
+        <div class="customer-form container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <?= $form->field($model, 'folder')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-sm-4">
+                    <label>Upload</label>
+                    <div class="input-group">
+                        <label class="input-group-btn">
                     <span class="btn btn-primary" style="height: inherit;">
                         Arquivo&hellip; <input type="file"  id="excelSheet" name="fileUpload" style="display: none;" multiple>
                     </span>
-                    </label>
-                    <input type="text" id="fileUploadTxt" class="form-control" readonly>
-                    <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Enviar',
-                        ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
-                </div>
+                        </label>
+                        <input type="text" id="fileUploadTxt" class="form-control" readonly>
+                        <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Enviar',
+                            ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
+                    </div>
 
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <div id="selected_file"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="container">
-                <div id="container_files"> </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div id="selected_file"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="container">
+                        <div id="container_files"> </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 <?php
 $script = <<< JS
 

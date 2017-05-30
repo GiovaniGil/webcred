@@ -14,7 +14,7 @@ use yii\helpers\Url;
 <?= Html::img('@web/img/user2-160x160.jpg', ['class' => 'img-circle', 'alt' => 'User Image']) ?>
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
+                <p><?= Yii::$app->user->identity->username; ?></p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -61,10 +61,16 @@ use yii\helpers\Url;
                             'label' => 'Users',
                             'icon' => 'fa fa-users',
                             'url' => ['/user'],
-                            'active' => $this->context->route == 'site/user',
+                            'active' => $this->context->route == 'user/index',
+                        ],
+                        [
+                            'label' => 'Log de Clientes',
+                            'icon' => 'fa fa-dashboard',
+                            'url' => ['/customer'],
+                            'active' => $this->context->route == 'customer/index',
                         ],
                        /* ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],*/
-                        ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
+                      /*  ['label' => 'Log de Clientes', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],*/
                     ],
                 ]
         )
