@@ -2,58 +2,149 @@
 
 use asinfotrack\yii2\audittrail\widgets\AuditTrail;
 use common\models\User;
+use yii\bootstrap\Alert;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 
 ?>
+<?PHP
 
-    <section class="content">
-        <div class="customer-form container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <?= $form->field($model, 'folder')->textInput(['maxlength' => true]) ?>
-                </div>
-                <div class="col-sm-4">
-                    <label>Upload</label>
-                    <div class="input-group">
-                        <label class="input-group-btn">
+echo Alert::widget([
+    'options' => [
+        'class' => 'alert-success',
+        'style' => 'display:none',
+        'id' => 'sheet-imported'
+    ],
+    'body' => '<div id="alert-text">...</div>',
+]);
+
+echo Alert::widget([
+    'options' => [
+        'class' => 'alert-danger',
+        'style' => 'display:none',
+        'id' => 'sheet-danger'
+    ],
+    'body' => '<div id="alert-danger">...</div>',
+]);
+
+?>
+<div class="overlay">
+    <div class="fix" id="loading-img"><i class="fa fa-5x fa-circle-o-notch fa-spin"></i></i></div>
+</div>
+<section class="content">
+    <div class="customer-form container">
+        <div class="row">
+
+            <?php $form = ActiveForm::begin(['id' => 'formSheet',
+                'action' =>  urldecode(Yii::$app->urlManager->createUrl(['customer/upload-file'])),
+                'options' => ['method' => 'POST','enctype' => 'multipart/form-data']]) ?>
+            <div class="col-sm-4">
+                <label>Upload</label>
+                <div class="input-group">
+                    <label class="input-group-btn">
                     <span class="btn btn-primary" style="height: inherit;">
-                        Arquivo&hellip; <input type="file"  id="excelSheet" name="fileUpload" style="display: none;" multiple>
-                    </span>
-                        </label>
-                        <input type="text" id="fileUploadTxt" class="form-control" readonly>
-                        <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Enviar',
-                            ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
-                    </div>
+                        Arquivo&hellip; <?= $form->field($model, 'file', ['template' => "{input}"])->fileInput(['id' => 'excelSheet', 'style' => 'display: none;']) ?>
 
+                        <input type="hidden" name="id" value="<?= $model->id ?>" />
+                    </span>
+                    </label>
+                    <input type="text" id="fileUploadTxt" class="form-control" readonly>
+                    <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Importar',
+                        ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div id="selected_file"></div>
-                </div>
+            <?php ActiveForm::end() ?>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="selected_file"></div>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="container">
-                        <div id="container_files"> </div>
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="container">
+                    <div id="container_files"> </div>
                 </div>
             </div>
         </div>
-    </section>
-<?php
-$script = <<< JS
+    </div>
+</section>
 
-    $(document).ready(function(){
-        
-        
-	$( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + 'Generating Tree...' + '<li></ul>' );
+<?php
+
+$this->registerCss("
+#loading-img {    
+    width: 40px;
+    margin:100px auto;  
+    position: sticky;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -100px;
+}
+
+.overlay {
+    background: #e9e9e9;
+    display: none;
+    position: fixed;
+    overflow-y: scroll;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+    z-index:1000;
+}
+
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'FontAwesome';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: '\\f0d8';
+}
+
+a.desc:after {
+    content: '\\f0d7';
+}
+
+/*.sort-numerical a.asc:after {
+    content: '\\e153';
+}
+
+.sort-numerical a.desc:after {
+    content: '\\e154';
+}
+
+.sort-ordinal a.asc:after {
+    content: '\\e155';
+}
+
+.sort-ordinal a.desc:after {
+    content: '\\e156';*/
+}
+
+"
+);
+
+$script = <<< JS
+     $(document).ready( function () {
+
+$( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + 'Generating Tree...' + '<li></ul>' );
 	
 	getfilelist( $('#container_files') , '$model->folder' );
 	
 	function getfilelist( cont, root ) {
-	
 		$( cont ).addClass( 'wait' );
 			
 		$.post( '../../common/treeview/Folder_tree.php', { dir: root }, function( data ) {
@@ -84,16 +175,100 @@ $script = <<< JS
 				entry.removeClass('expanded').addClass('collapsed');
 			}
 		} else {
+		    ///alert(URL.createObjectURL($(this).attr( 'rel' )));
 			$( '#selected_file' ).text( "File:  " + $(this).attr( 'rel' ));
 		}
 	return false;
 	});
         
         
+        $('.field-excelSheet').each(function(){        
+            $(this).removeClass('form-group');
+        });
         
-        
-    });
+        $( '#formSheet' ).on('beforeSubmit', function(e) {
 
+        $('#sheet-danger').hide();
+        $('#sheet-imported').hide();
+        
+        if($('#excelSheet').val() != ""){
+                $(".overlay").show();
+                var form = $(this);
+                var formData = new FormData($(this)[0]);
+
+                $.ajax({
+                url: form.attr("action"),
+                type: form.attr("method"),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {                       
+                     
+                     setTimeout(function(){
+                        $(".overlay").hide();
+                        if(data.success){
+                            $('#alert-text').text(data.msg);
+                            $('#sheet-imported').show();
+                            $( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + 'Generating Tree...' + '<li></ul>' );
+                            getfilelist( $('#container_files') , '$model->folder' );
+                        }else{
+                            $('#alert-danger').text(data.msg);
+                            $('#sheet-danger').show();
+                        }
+                        //async:false - refresh apenas nos container, sem essa opção dá refresh na página toda
+                        //$.pjax.reload({container: '#pjax-grid-view', async: false});
+                        $('#excelSheet').val('');
+                        $('#fileUploadTxt').val('');
+                                                
+                      },3000);      
+                      
+                },
+                error: function (exception) {
+                    alert('Error: '+exception);
+                    $(".overlay").hide();
+                }
+            });
+        }}).on('submit', function(e){
+            e.preventDefault();
+        });
+});
+
+$(function() {
+
+        // We can attach the `fileselect` event to all file inputs on the page
+        $(document).on('change', ':file', function() {
+            var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = '';
+            
+            $.each( input.get(0).files, function (index, file) {
+                label = file.name;
+            });
+            
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        // We can watch for our custom `fileselect` event like this
+        $(document).ready( function() {
+            $(':file').on('fileselect', function(event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                    log = numFiles > 1 ? numFiles + ' arquivos selecionados' : label;
+
+                if( input.length ) {
+                    input.val(log);
+                } else {
+                    if( log ) alert(log);
+                }
+
+            });
+        });
+
+    });
+  
 JS;
 $this->registerJs($script);
 ?>
+
+

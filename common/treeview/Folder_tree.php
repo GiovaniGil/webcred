@@ -44,7 +44,7 @@ class treeview {
 			foreach( $this->files as $file ) {
 				if( file_exists( $this->folder . $file ) && $file != '.' && $file != '..' && !is_dir( $this->folder . $file )) {
 					$ext = preg_replace('/^.*\./', '', $file);
-					$list .= '<li class="file ext_' . $ext . '"><a href="file:///' . htmlentities( $this->folder . $file ) . '" rel="' . htmlentities( $this->folder . $file ) . '">' . htmlentities( $file ) . '</a></li>';
+					$list .= '<li  class="file ext_' . $ext . '"><a href="file://///' . htmlentities( $this->folder . $file ) . '" rel="' . htmlentities( $this->folder . $file ) . '">' . htmlentities( $file ) . '</a></li>';
 				}
 			}
 			$list .= '</ul>';	

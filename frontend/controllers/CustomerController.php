@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use ruskid\csvimporter\CSVReader;
 use ruskid\csvimporter\MultipleImportStrategy;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -105,7 +106,7 @@ class CustomerController extends Controller
             $model->phone2 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone2));
             $model->phone3 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone3));
             $model->zip_code = preg_replace('/[^0-9]/', '',utf8_encode($model->zip_code));
-            
+
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -143,6 +144,28 @@ class CustomerController extends Controller
         }
     }
 
+    public function actionUploadFile(){
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = [];
+        $model = $this->findModel(intval($_POST['id']));
+
+        if (Yii::$app->request->isAjax && isset($_FILES)) {
+            $model->load(Yii::$app->request->post());
+            $model->file = UploadedFile::getInstance($model, 'file');
+
+            $pathFile = $model->folder . '/' . $model->file->baseName . '.' . $model->file->extension;
+            if(!empty($pathFile) && file_exists($pathFile))
+                unlink($pathFile);
+
+            $model->file->saveAs($pathFile, false);
+            $data = ['success' => true, 'msg' => 'Arquivo enviado com sucesso.'];
+        }
+        else
+            $data = ['success' => false, 'msg' => 'Erro na importação do arquivo'];
+
+        return $data;
+    }
 
     public function actionImportSheet(){
         Yii::$app->response->format = Response::FORMAT_JSON;

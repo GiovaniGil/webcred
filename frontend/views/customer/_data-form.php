@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $model frontend\models\Customer */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<?php $form = ActiveForm::begin(); ?>
     <section class="content">
         <div class="customer-form container">
             <div class="row">
@@ -147,8 +148,18 @@ use yii\widgets\ActiveForm;
                     <?= $form->field($model, 'telemarketing')->textInput(['maxlength' => true]) ?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <?= $form->field($model, 'folder')->textInput(['maxlength' => true]) ?>
+                </div>
+            </div>
         </div>
     </section>
+    <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    </div>
+
+<?php ActiveForm::end(); ?>
 <?php
 $script = <<< JS
 

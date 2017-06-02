@@ -31,6 +31,7 @@ use Yii;
  */
 class Customer extends \yii\db\ActiveRecord
 {
+    public $file;
     /**
      * @inheritdoc
      */
@@ -50,6 +51,7 @@ class Customer extends \yii\db\ActiveRecord
             [['document'], 'integer'],
             [['observation'], 'string'],
             [['folder'], 'string'],
+            [['file'], 'file'],
             [['name', 'agency', 'registry', 'address', 'complement', 'zip_code', 'neighbourhood', 'city', 'state', 'phone1', 'phone2', 'phone3', 'mail', 'customer_password', 'telemarketing'], 'string', 'max' => 255],
         ];
     }
@@ -80,6 +82,7 @@ class Customer extends \yii\db\ActiveRecord
             'observation' => 'Observation',
             'telemarketing' => 'Telemarketing',
             'folder' => 'Folder',
+            'file' => Yii::t('frontend','File')
         ];
     }
 

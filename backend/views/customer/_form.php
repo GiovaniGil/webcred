@@ -38,7 +38,7 @@ echo Tabs::widget([
             'options' => ['id' => 'files'],
         ],
             [
-            'label' => 'Log de Alteração',
+            'label' => Yii::t('backend', 'Log'),
             'content' =>  $this->render('_log', [
                // 'searchModel' => $searchModel,
                 'model' => $model,
