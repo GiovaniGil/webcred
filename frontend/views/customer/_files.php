@@ -33,14 +33,14 @@ echo Alert::widget([
     <div class="fix" id="loading-img"><i class="fa fa-5x fa-circle-o-notch fa-spin"></i></i></div>
 </div>
 <section class="content">
+    <fieldset><legend>Upload</legend>
     <div class="customer-form container">
         <div class="row">
-
             <?php $form = ActiveForm::begin(['id' => 'formSheet',
                 'action' =>  urldecode(Yii::$app->urlManager->createUrl(['customer/upload-file'])),
                 'options' => ['method' => 'POST','enctype' => 'multipart/form-data']]) ?>
             <div class="col-sm-4">
-                <label>Upload</label>
+
                 <div class="input-group">
                     <label class="input-group-btn">
                     <span class="btn btn-primary" style="height: inherit;">
@@ -50,16 +50,19 @@ echo Alert::widget([
                     </span>
                     </label>
                     <input type="text" id="fileUploadTxt" class="form-control" readonly>
-                    <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Importar',
+                    <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Enviar',
                         ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
                 </div>
             </div>
             <?php ActiveForm::end() ?>
         </div>
-        <div class="row">
+        <!--<div class="row">
             <div class="col-sm-4">
                 <div id="selected_file"></div>
             </div>
+        </div>-->
+        <div class="row">
+            <div class="col-sm-12"><hr class="col-sm-12"></div>
         </div>
         <div class="row">
             <div class="col-sm-12">
@@ -69,6 +72,7 @@ echo Alert::widget([
             </div>
         </div>
     </div>
+    </fieldset>
 </section>
 
 <?php
@@ -118,46 +122,31 @@ a.desc:after {
     content: '\\f0d7';
 }
 
-/*.sort-numerical a.asc:after {
-    content: '\\e153';
-}
-
-.sort-numerical a.desc:after {
-    content: '\\e154';
-}
-
-.sort-ordinal a.asc:after {
-    content: '\\e155';
-}
-
-.sort-ordinal a.desc:after {
-    content: '\\e156';*/
-}
-
 "
 );
 
 $script = <<< JS
      $(document).ready( function () {
-
-$( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + 'Generating Tree...' + '<li></ul>' );
-	
-	getfilelist( $('#container_files') , '$model->folder' );
-	
-	function getfilelist( cont, root ) {
-		$( cont ).addClass( 'wait' );
-			
-		$.post( '../../common/treeview/Folder_tree.php', { dir: root }, function( data ) {
-	
-			$( cont ).find( '.start' ).html( '' );
-			$( cont ).removeClass( 'wait' ).append( data );
-			if( 'Sample' == root ) 
-				$( cont ).find('UL:hidden').show();
-			else 
-				$( cont ).find('UL:hidden').slideDown({ duration: 500, easing: null });
-			
-		});
-	}
+     
+     
+        $( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + 'Generating Tree...' + '<li></ul>' );
+        
+        getfilelist( $('#container_files') , '$model->folder' );
+        
+        function getfilelist( cont, root ) {
+            $( cont ).addClass( 'wait' );
+                
+            $.post( '../../common/treeview/Folder_tree.php', { dir: root }, function( data ) {
+        
+                $( cont ).find( '.start' ).html( '' );
+                $( cont ).removeClass( 'wait' ).append( data );
+                if( 'Sample' == root ) 
+                    $( cont ).find('UL:hidden').show();
+                else 
+                    $( cont ).find('UL:hidden').slideDown({ duration: 500, easing: null });
+                
+            });
+        }
 	
 	$( '#container_files' ).on('click', 'LI A', function() {
 		var entry = $(this).parent();
@@ -176,7 +165,7 @@ $( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + '
 			}
 		} else {
 		    ///alert(URL.createObjectURL($(this).attr( 'rel' )));
-			$( '#selected_file' ).text( "File:  " + $(this).attr( 'rel' ));
+			//$( '#selected_file' ).text( "File:  " + $(this).attr( 'rel' ));
 		}
 	return false;
 	});
