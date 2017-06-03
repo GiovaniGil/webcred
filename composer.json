@@ -19,7 +19,8 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "ruskid/yii2-csv-importer": "dev-master",
-        "asinfotrack/yii2-audittrail": "dev-master"
+        "asinfotrack/yii2-audittrail": "dev-master",
+        "machour/yii2-notifications": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

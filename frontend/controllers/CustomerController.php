@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\components\Notification;
 use ruskid\csvimporter\CSVImporter;
 use Yii;
 use frontend\models\Customer;
@@ -58,8 +59,11 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        //dentro do main, modules - ip do user é setado para verificar quem poderá visualizar a notificação.
+        Notification::success(Notification::KEY_BIRTHDAY_REMINDER, Yii::$app->user->id, $model->id);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model
         ]);
     }
 
