@@ -50,8 +50,8 @@ class treeview {
 								<a href="file://///' . htmlentities( $this->folder . $file ) . '" rel="' . htmlentities( $this->folder . $file ) . '">' .
 								substr(htmlentities( $file ),0,50) . (strlen(htmlentities( $file )) > 50 ? '...' : '') . '</a>
 							</div>	
-							<div class="col-sm-2">
-								<a href="#"><i class="fa fa-trash" aria-hidden="true" style="color:red"></i> Remover</a>
+							<div class="col-sm-2 file">
+								<a href="' . htmlentities( $this->folder . $file ) . '"><i class="fa fa-trash" aria-hidden="true" style="color:red"></i> Remover</a>
 							</div>
 						</div>
 					</li>';

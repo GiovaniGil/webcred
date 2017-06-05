@@ -32,6 +32,7 @@ class CustomerController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                     'importSheet' => ['POST'],
+                    'deleteFile' => ['POST'],
                 ],
             ],
         ];
@@ -61,7 +62,7 @@ class CustomerController extends Controller
     {
         $model = $this->findModel($id);
         //dentro do main, modules - ip do user é setado para verificar quem poderá visualizar a notificação.
-        Notification::success(Notification::KEY_BIRTHDAY_REMINDER, Yii::$app->user->id, $model->id);
+        //Notification::success(Notification::KEY_BIRTHDAY_REMINDER, Yii::$app->user->id, $model->id);
         return $this->render('view', [
             'model' => $model
         ]);
@@ -167,6 +168,21 @@ class CustomerController extends Controller
         }
         else
             $data = ['success' => false, 'msg' => 'Erro na importação do arquivo'];
+
+        return $data;
+    }
+
+    public function actionDeleteFile(){
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = [];
+        $file =  Yii::$app->request->post('file');
+        if (Yii::$app->request->isAjax && file_exists($file)) {
+            unlink($file);
+            $data = ['success' => true, 'msg' => 'Arquivo deletado com sucesso.'];
+        }
+        else
+            $data = ['success' => false, 'msg' => 'Erro na deleção do arquivo'];
 
         return $data;
     }

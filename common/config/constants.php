@@ -6,3 +6,4 @@
  * Time: 20:53
  */
 define('DATE', 'php:d/m/Y');
+define('DATE_DM', 'php:d/m');

@@ -126,12 +126,13 @@ a.desc:after {
 );
 
 $script = <<< JS
+
+
      $(document).ready( function () {
-     
      
         $( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + 'Generating Tree...' + '<li></ul>' );
         
-        getfilelist( $('#container_files') , '$model->folder' );
+        getfilelist( $('#container_files') , '$model->folder' );       
         
         function getfilelist( cont, root ) {
             $( cont ).addClass( 'wait' );
@@ -164,8 +165,41 @@ $script = <<< JS
 				entry.removeClass('expanded').addClass('collapsed');
 			}
 		} else {
-		    ///alert(URL.createObjectURL($(this).attr( 'rel' )));
-			//$( '#selected_file' ).text( "File:  " + $(this).attr( 'rel' ));
+		    if( entry.hasClass('file')){
+
+		        fileName = $(this).attr('href');
+		        var r = confirm("Você tem certeza que deseja excluir o arquivo '"+fileName.split('/')[fileName.split('/').length-1]+"'?");
+	    
+		        if (r){
+		            $(".overlay").show();
+                    $.post({
+                    url: 'index.php?r=customer/delete-file',
+                    type: 'POST',
+                    data: {file: fileName},
+                    success: function (data) {                                                
+                         setTimeout(function(){
+                            $(".overlay").hide();
+                            if(data.success){
+                                $('#alert-text').text(data.msg);
+                                $('#sheet-imported').show();
+                                $( '#container_files' ).html( '<ul class="filetree start"><li class="wait">' + 'Generating Tree...' + '<li></ul>' );
+                                getfilelist( $('#container_files') , '$model->folder' );
+                            }else{
+                                $('#alert-danger').text(data.msg);
+                                $('#sheet-danger').show();
+                            }                                                    
+                          },3000);                               
+                    },
+                    error: function (exception) {
+                        alert('Error: '+exception);
+                        $(".overlay").hide();
+                    }
+                });
+                }
+		    
+		
+		    }
+
 		}
 	return false;
 	});
@@ -251,7 +285,7 @@ $(function() {
                     if( log ) alert(log);
                 }
 
-            });
+            });                       
         });
 
     });

@@ -24,7 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            [
+                'label' => '',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $session =  Yii::$app->db->createCommand('SELECT user_id FROM session WHERE user_id = '.$model->id)->queryOne();
 
+                    if($session)
+                        return Html::tag('i', '', ['class' => 'fa fa-fw fa-user', 'style' => 'color:green']) ;
+                    else
+                        return Html::tag('i', '', ['class' => 'fa fa-fw fa-user', 'style' => 'color:red']) ;
+                }
+            ],
             //'id',
             'name',
             'username',
@@ -35,7 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'status',
             // 'created_at',
             // 'updated_at',
-
             ['class' => 'yii\grid\ActionColumn',
              'header' => 'Actions'],
         ],

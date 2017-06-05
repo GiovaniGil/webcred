@@ -46,7 +46,10 @@ class Notification extends BaseNotification
     {
         switch ($this->key) {
             case self::KEY_BIRTHDAY_REMINDER:
-                return '<i class="fa fa-birthday-cake" aria-hidden="true"></i> '. Yii::t('app', 'Birthday reminder');
+                $customer = Customer::findOne($this->key_id);
+                return '<i class="fa fa-birthday-cake" aria-hidden="true"></i> '. Yii::t('app', 'Birthday of {customer}', [
+                    'customer' => explode(' ',$customer->name)[0].' - '.Yii::$app->formatter->asDate($customer->birthday, DATE_DM)
+                ]);
 
             case self::KEY_NEW_MESSAGE:
                 return Yii::t('app', 'You got a new message');
@@ -64,9 +67,7 @@ class Notification extends BaseNotification
         switch ($this->key) {
             case self::KEY_BIRTHDAY_REMINDER:
                 $customer = Customer::findOne($this->key_id);
-                return Yii::t('app', 'Birthday of {customer}', [
-                    'customer' => $customer->name
-                ]);
+                return Yii::t('app', 'Congratulations!');
 
             /*case self::KEY_NEW_MESSAGE:
                 $message = Message::findOne($this->key_id);
@@ -87,7 +88,7 @@ class Notification extends BaseNotification
     {
         switch ($this->key) {
             case self::KEY_BIRTHDAY_REMINDER:
-                return ['customer', 'id' => $this->key_id];
+                return ['customer/view', 'id' => $this->key_id];
 
             case self::KEY_NEW_MESSAGE:
                 return ['message/read', 'id' => $this->key_id];
