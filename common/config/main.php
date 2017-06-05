@@ -2,6 +2,15 @@
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        'session' => [
+            'class' => 'yii\web\DbSession',
+            'writeCallback' => function ($session) {
+                return [
+                    'user_id' => Yii::$app->user->id,
+                    'last_write' => time(),
+                ];
+            },
+        ],
         /*'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false, // Only considered when enablePrettyUrl is set to true
