@@ -61,7 +61,7 @@ class CustomerSearch extends Customer
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'birthday' => $this->birthday,
+            'birthday' => implode("-", array_reverse(explode("/", $this->birthday))),
             'document' => $this->document,
         ]);
 

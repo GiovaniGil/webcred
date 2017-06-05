@@ -65,3 +65,17 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$script = <<< JS
+
+    $(document).ready(function(){
+        $("#user-password_hash").val('');
+        $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+        $.fn.datepicker.defaults.language = "pt-BR";
+        $('#user-birthday').datepicker({});        
+    });
+
+JS;
+$this->registerJs($script);
+?>

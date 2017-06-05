@@ -69,6 +69,7 @@ class UserController extends Controller
 
             $model->generateAuthKey();
             $model->status = 10;
+            $model->birthday = implode("-", array_reverse(explode("/", $model->birthday)));
 
             if ($model->validate()) {
                 $model->setPassword($model->password_hash);
@@ -92,13 +93,20 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->birthday = implode("-", array_reverse(explode("/", $model->birthday)));
+            if ($model->validate()) {
+                $model->setPassword($model->password_hash);
+                $model->confirm_password = $model->password_hash;
+                if ($model->save())
+                    return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+
     }
 
     /**

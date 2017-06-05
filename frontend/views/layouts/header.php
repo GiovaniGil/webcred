@@ -108,13 +108,13 @@ use yii\helpers\Html;
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-					<?= Html::img('@web/img/user2-160x160.jpg', ['class' => 'user-image', 'alt'=>'User Image']) ?>
+					<?= Html::img('@web/img/avatar2-160x160.jpg', ['class' => 'user-image', 'alt'=>'User Image']) ?>
                   <span class="hidden-xs"><?= Yii::$app->user->identity->name; ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <?= Html::img('@web/img/user2-160x160.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
+                    <?= Html::img('@web/img/avatar2-160x160.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
                     <p>
                       <?= Yii::$app->user->identity->name; ?>
                       <small>Member since <?= date("d/m/Y", strtotime(Yii::$app->user->identity->created_at)); ?></small>

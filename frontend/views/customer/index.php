@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             [
                 'attribute' => 'birthday',
-                'format' => ['date', DATE],
+                'format' => ['date', DATE]
             ],
             'document',
             // 'registry',
@@ -170,8 +170,12 @@ a.desc:after {
 );
 
 $script = <<< JS
-     $(document).ready( function () {
-
+     $(document).ready( function () {        
+        
+        $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+        $.fn.datepicker.defaults.language = "pt-BR";
+        $('input[name="CustomerSearch[birthday]"]').datepicker({});        
+        
         $( '#formSheet' ).on('beforeSubmit', function(e) {
         
         $('#sheet-danger').hide();
