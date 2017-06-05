@@ -51,8 +51,9 @@ $script = <<< JS
 			else 
 				$( cont ).find('UL:hidden').slideDown({ duration: 500, easing: null });
 			
+			$("div.file").remove();
 		});
-	}
+	}	
 	
 	$( '#container_files' ).on('click', 'LI A', function() {
 		var entry = $(this).parent();
@@ -70,15 +71,14 @@ $script = <<< JS
 				entry.removeClass('expanded').addClass('collapsed');
 			}
 		} else {
-			$( '#selected_file' ).text( "File:  " + $(this).attr( 'rel' ));
+			 if( entry.hasClass('open-file')){
+		           return true;		        
+		     }
 		}
 	return false;
-	});
+	});                       
         
-        
-        
-        
-    });
+});
 
 JS;
 $this->registerJs($script);

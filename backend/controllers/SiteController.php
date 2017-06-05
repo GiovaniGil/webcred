@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Admin;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -26,7 +27,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'profile'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -95,5 +96,23 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionProfile(){
+
+        $model = Admin::findOne(Yii::$app->user->id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if ($model->validate()) {
+                $model->setPassword($model->password_hash);
+/*                $model->confirm_password = $model->password_hash;*/
+                if ($model->save())
+                    return $this->render('index');
+            }
+        }
+        return $this->render('updateProfile', [
+            'model' => $model,
+        ]);
     }
 }

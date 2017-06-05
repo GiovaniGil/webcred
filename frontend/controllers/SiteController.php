@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 
+use common\models\User;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -27,7 +28,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'profile'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -35,7 +36,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'profile'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,7 +45,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['post']
                 ],
             ],
         ];
@@ -210,6 +211,26 @@ class SiteController extends Controller
         }
 
         return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
+    }
+
+
+    public function actionProfile(){
+
+        $model = User::findOne(Yii::$app->user->id);
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->birthday = implode("-", array_reverse(explode("/", $model->birthday)));
+            if ($model->validate()) {
+                $model->setPassword($model->password_hash);
+                $model->confirm_password = $model->password_hash;
+                if ($model->save())
+                    return $this->render('index');
+            }
+        }
+        return $this->render('updateProfile', [
             'model' => $model,
         ]);
     }

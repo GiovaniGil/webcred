@@ -36,6 +36,7 @@ return [
     'Phone1' => '',
     'Phone2' => '',
     'Phone3' => '',
+    'Profile' => '',
     'Registry' => '',
     'State' => '',
     'Telemarketing' => '',

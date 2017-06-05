@@ -17,13 +17,15 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Update User {user}' => 'Atualizar Usuário {user}',
+    'Delete' => 'Apagar',
     'Actions' => '@@Ações@@',
     'Create' => 'Criar',
     'Create User' => 'Cadastrar Usuário',
     'Customers' => 'Clientes',
     'Log' => 'Log de alteração',
+    'Profile' => 'Meus dados',
     'Update' => 'Atualizar',
+    'Update User {user}' => 'Atualizar Usuário {user}',
     'Users' => 'Usuários',
     'birthday' => 'Data de Nascimento',
     'confirm_password' => 'Confirmação da Senha',

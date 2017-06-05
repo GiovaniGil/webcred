@@ -136,4 +136,10 @@ class CustomerController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionOpenFile($filename)
+    {
+        ob_clean();
+        \Yii::$app->response->sendFile($filename)->send();
+    }
 }

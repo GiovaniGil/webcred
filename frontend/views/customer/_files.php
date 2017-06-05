@@ -10,9 +10,6 @@ use yii\widgets\DetailView;
 ?>
 <?PHP
 
-$data = 'C:/data/mydata.log';
-echo Html::a('Download', ['sample-download', 'filename' => $data], ['target' => '_blank']);
-
 echo Alert::widget([
     'options' => [
         'class' => 'alert-success',

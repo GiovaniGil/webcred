@@ -20,6 +20,8 @@ return [
     'Create' => '',
     'Create User' => '',
     'Customers' => '',
+    'Delete' => '',
+    'Profile' => '',
     'Update' => '',
     'Update User {user}' => '',
     'Users' => '',

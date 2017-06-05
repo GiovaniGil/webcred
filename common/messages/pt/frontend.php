@@ -17,12 +17,13 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Create' => 'Criar',
+    'Profile' => 'Meus dados',
     'Address' => 'Endereço',
     'Agency' => 'Orgão',
     'Birthday' => 'Data de Nascimento',
     'City' => 'Cidade',
     'Complement' => 'Complemento',
+    'Create' => 'Criar',
     'Create Customer' => 'Cadastrar Cliente',
     'Customer Password' => 'Senha do Cliente',
     'Customers' => 'Clientes',
