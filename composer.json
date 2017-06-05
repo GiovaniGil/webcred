@@ -13,6 +13,13 @@
         "source": "https://github.com/yiisoft/yii2"
     },
     "minimum-stability": "stable",
+    "repositories":
+    [
+        {
+            "type": "vcs",
+            "url": "https://github.com/michaelst/yii2-notifications"
+        }
+    ],
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.6",
@@ -20,7 +27,7 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "ruskid/yii2-csv-importer": "dev-master",
         "asinfotrack/yii2-audittrail": "dev-master",
-        "machour/yii2-notifications": "@dev"
+        "machour/yii2-notifications": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -58,7 +58,7 @@ use yii\helpers\Url;
                             ]
                         ],*/
                         [
-                            'label' => 'Customers',
+                            'label' => Yii::t('frontend','Customers'),
                             'icon' => 'fa fa-users',
                             'url' => ['/customer'],
                             'active' => $this->context->route == 'customer/index',

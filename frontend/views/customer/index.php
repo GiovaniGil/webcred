@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel frontend\models\CustomerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Customers';
+$this->title = Yii::t('frontend', 'Customers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
     <div class="row">
         <div class="col-lg-3 col-sm-3 col-6">
-            <?= Html::a('Create Customer', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a(Yii::t('frontend','Create Customer'), ['create'], ['class' => 'btn btn-success']) ?>
 
         </div>
         <?php $form = ActiveForm::begin(['id' => 'formSheet',

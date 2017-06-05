@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "20e8d0a3a6534c6ba08662ef19977fb4",
+    "content-hash": "a41d8a364bc95fd510a513ad4aa8d772",
     "packages": [
         {
             "name": "asinfotrack/yii2-audittrail",
@@ -367,16 +367,16 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.9.2",
+            "version": "v4.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4"
+                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
-                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/95e1bae3182efc0f3422896a3236e991049dac69",
+                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
                 "shasum": ""
             },
             "require": {
@@ -410,7 +410,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-03-13T06:30:53+00:00"
+            "time": "2017-06-03T02:28:16+00:00"
         },
         {
             "name": "fortawesome/font-awesome",
@@ -465,17 +465,16 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/machour/yii2-notifications.git",
-                "reference": "e38efc21e4335586475f0a80ae6ae726349e4a76"
+                "url": "https://github.com/michaelst/yii2-notifications.git",
+                "reference": "78a0b16920aeb49f2fe4a52d9d782ed9f2c9a833"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/machour/yii2-notifications/zipball/e38efc21e4335586475f0a80ae6ae726349e4a76",
-                "reference": "e38efc21e4335586475f0a80ae6ae726349e4a76",
+                "url": "https://api.github.com/repos/michaelst/yii2-notifications/zipball/78a0b16920aeb49f2fe4a52d9d782ed9f2c9a833",
+                "reference": "78a0b16920aeb49f2fe4a52d9d782ed9f2c9a833",
                 "shasum": ""
             },
             "require": {
-                "rmrevin/yii2-fontawesome": "~2.15",
                 "yiisoft/yii2": "*"
             },
             "type": "yii2-extension",
@@ -489,7 +488,6 @@
                     "machour\\yii2\\notifications\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "Mehdi Achour",
@@ -504,7 +502,10 @@
                 "noty",
                 "yii"
             ],
-            "time": "2016-10-14 11:22:45"
+            "support": {
+                "source": "https://github.com/machour/yii2-notifications"
+            },
+            "time": "2016-05-24 23:24:07"
         },
         {
             "name": "rmrevin/yii2-fontawesome",

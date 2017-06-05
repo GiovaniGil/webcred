@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel frontend\models\CustomerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Customers';
+$this->title = Yii::t('backend', 'Customers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">

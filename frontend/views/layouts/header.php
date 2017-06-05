@@ -20,7 +20,7 @@ use yii\helpers\Html;
             <ul class="nav navbar-nav">
 
               <!-- -->
-              <li class="dropdown notifications-menu">
+              <!--<li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-bell-o"></i>
                   <span class="label label-danger notifications-icon-count">0</span>
@@ -31,8 +31,24 @@ use yii\helpers\Html;
                     <div id="notifications"></div>
                   </li>
                 </ul>
+              </li>-->
+              <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-bell-o"></i>
+                  <span class="label label-danger notifications-icon-count">0</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">You have <span class="notifications-header-count">0</span> notifications</li>
+                  <li>
+                    <ul class="menu">
+                      <div id="notifications"></div>
+                    </ul>
+                  </li>
+                  <li class="footer"><a href="#">View all</a></li>
+                </ul>
               </li>
               <?PHP
+
 
               NotificationsWidget::widget([
                   'theme' => NotificationsWidget::THEME_GROWL,
@@ -44,6 +60,7 @@ use yii\helpers\Html;
                       '.notifications-icon-count'
                   ],
                   'listSelector' => '#notifications',
+                  'xhrTimeout' => 3000
               ]);
               ?>
 

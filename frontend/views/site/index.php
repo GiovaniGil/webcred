@@ -7,7 +7,7 @@ $this->title = 'Webcred';
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Webcred - Clientes</h1>
+        <h1>Webcred Clientes <img src="../../common/images/arroba.png" width="50px"/></h1>
         <p class="lead">Bem Vindo!</p>
     </div>
 

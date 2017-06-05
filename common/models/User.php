@@ -65,6 +65,18 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'name' => Yii::t('backend', 'name'),
+            'username' => Yii::t('backend', 'username'),
+            'password_hash' => Yii::t('backend', 'password_hash'),
+            'confirm_password' => Yii::t('backend', 'confirm_password'),
+            'birthday' => Yii::t('backend', 'birthday'),
+            'email' => Yii::t('backend', 'email'),
+        ];
+    }
+
     public function confirmPassword($attribute, $params){
         if($this->confirm_password != $this->password_hash)
             $this->addError($attribute, 'A senha deve ser igual na confirmação.');

@@ -66,7 +66,6 @@ class Notification extends BaseNotification
     {
         switch ($this->key) {
             case self::KEY_BIRTHDAY_REMINDER:
-                $customer = Customer::findOne($this->key_id);
                 return Yii::t('app', 'Congratulations!');
 
             /*case self::KEY_NEW_MESSAGE:
@@ -88,7 +87,7 @@ class Notification extends BaseNotification
     {
         switch ($this->key) {
             case self::KEY_BIRTHDAY_REMINDER:
-                return ['customer/view', 'id' => $this->key_id];
+                return 'index.php?r=customer/update&id='.$this->key_id;
 
             case self::KEY_NEW_MESSAGE:
                 return ['message/read', 'id' => $this->key_id];

@@ -9,7 +9,7 @@ use yii\widgets\DetailView;
 /* @var $model frontend\models\Customer */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Customers') , 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

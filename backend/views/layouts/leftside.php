@@ -58,13 +58,13 @@ use yii\helpers\Url;
 //                            ]
 //                        ],
                         [
-                            'label' => 'Users',
+                            'label' => Yii::t('backend','Users'),
                             'icon' => 'fa fa-users',
                             'url' => ['/user'],
                             'active' => $this->context->route == 'user/index',
                         ],
                         [
-                            'label' => 'Log de Clientes',
+                            'label' => Yii::t('backend','Log'),
                             'icon' => 'fa fa-dashboard',
                             'url' => ['/customer'],
                             'active' => $this->context->route == 'customer/index',

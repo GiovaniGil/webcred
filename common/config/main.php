@@ -2,6 +2,10 @@
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        /*'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false, // Only considered when enablePrettyUrl is set to true
+        ],*/
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -21,15 +25,6 @@ return [
                 ],
             ],
         ],
-        'session' => [
-            'class' => 'yii\web\DbSession',
-            'writeCallback' => function ($session) {
-                return [
-                    'user_id' => Yii::$app->user->id,
-                    'last_write' => time(),
-                ];
-            },
-        ],
     ],
     'modules' => [
         'notifications' => [
@@ -39,7 +34,7 @@ return [
             'notificationClass' => 'common\components\Notification',
             // Allow to have notification with same (user_id, key, key_id)
             // Default to FALSE
-            'allowDuplicate' => false,
+            //'allowDuplicate' => false,
             // This callable should return your logged in user Id
             'userId' => function() {
                 return \Yii::$app->user->id;
