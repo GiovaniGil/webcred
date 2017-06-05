@@ -46,8 +46,8 @@ class treeview {
 					$ext = preg_replace('/^.*\./', '', $file);
 					$list .= '<li  class="file ext_' . $ext . '">					
 						 <div class="row">
-                			<div class="col-sm-6">
-								<a href="file://///' . htmlentities( $this->folder . $file ) . '" rel="' . htmlentities( $this->folder . $file ) . '">' .
+                			<div class="col-sm-6 open-file">
+								<a href="/webcred/frontend/web/index.php?r=customer%2Fopen-file&filename=' . htmlentities( $this->folder . $file ) . '" rel="' . htmlentities( $this->folder . $file ) . '">' .
 								substr(htmlentities( $file ),0,50) . (strlen(htmlentities( $file )) > 50 ? '...' : '') . '</a>
 							</div>	
 							<div class="col-sm-2 file">

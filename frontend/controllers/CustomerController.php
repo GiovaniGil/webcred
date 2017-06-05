@@ -37,7 +37,11 @@ class CustomerController extends Controller
             ],
         ];
     }
-
+    public function actionOpenFile($filename)
+    {
+        ob_clean();
+        \Yii::$app->response->sendFile($filename)->send();
+    }
     /**
      * Lists all Customer models.
      * @return mixed
