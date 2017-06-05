@@ -117,7 +117,7 @@ use yii\helpers\Html;
                     <?= Html::img('@web/img/avatar2-160x160.jpg', ['class' => 'img-circle', 'alt'=>'User Image']) ?>
                     <p>
                       <?= Yii::$app->user->identity->name; ?>
-                      <small>Member since <?= date("d/m/Y", strtotime(Yii::$app->user->identity->created_at)); ?></small>
+                     <!-- <small>Member since /*= date("d/m/Y", strtotime(Yii::$app->user->identity->created_at)); */</small>-->
                     </p>
                   </li>
                   <!-- Menu Footer-->

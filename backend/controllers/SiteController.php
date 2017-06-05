@@ -101,10 +101,12 @@ class SiteController extends Controller
     public function actionProfile(){
 
         $model = Admin::findOne(Yii::$app->user->id);
-
         if ($model->load(Yii::$app->request->post())) {
             
             if ($model->validate()) {
+                $model->password_hash = Yii::$app->request->post()['Admin']['password_hash'];
+                $model->username = Yii::$app->request->post()['Admin']['username'];
+                $model->email = Yii::$app->request->post()['Admin']['email'];
                 $model->setPassword($model->password_hash);
 /*                $model->confirm_password = $model->password_hash;*/
                 if ($model->save())
