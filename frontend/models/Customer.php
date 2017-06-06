@@ -95,7 +95,7 @@ class Customer extends \yii\db\ActiveRecord
                 'class'=>AuditTrailBehavior::className(),
 
                 // some of the optional configurations
-                'ignoredAttributes'=>['created_at','updated_at'],
+                'ignoredAttributes'=>['created_at','updated_at', 'id'],
                 'consoleUserId'=>1,
                 'attributeOutput'=>[
                     'id'=>function ($value) {
