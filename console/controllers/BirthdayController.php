@@ -26,7 +26,7 @@ class BirthdayController extends Controller {
                                                          (DAYOFYEAR(birthday)-(dayofyear(date_format(birthday,\'%Y-03-01\'))-60))-
                                                           DAYOFYEAR(CURRENT_DATE)-(dayofyear(date_format(CURRENT_DATE,\'%Y-03-01\'))-60) faltam_dias
                                                           FROM webcred.customer) aniversarios LEFT JOIN webcred.notification ON notification.key_id = aniversarios.id
-                                                          WHERE aniversarios.faltam_dias > 0 and faltam_dias < 30 and notification.key_id is null')->queryAll();
+                                                          WHERE aniversarios.faltam_dias > 0 and faltam_dias < 30 and (notification.key_id is null or (year(notification.created_at) != year(CURRENT_DATE)))')->queryAll();
 
         foreach($users as $user) {
             foreach ($birthdays as $birthday) {

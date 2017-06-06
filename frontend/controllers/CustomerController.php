@@ -87,6 +87,7 @@ class CustomerController extends Controller
             $model->phone1 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone1));
             $model->phone2 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone2));
             $model->phone3 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone3));
+            $model->cell = preg_replace('/[^0-9]/', '',utf8_encode($model->cell));
             $model->zip_code = preg_replace('/[^0-9]/', '',utf8_encode($model->zip_code));
 
             if($model->save())
@@ -114,6 +115,7 @@ class CustomerController extends Controller
             $model->phone1 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone1));
             $model->phone2 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone2));
             $model->phone3 = preg_replace('/[^0-9]/', '',utf8_encode($model->phone3));
+            $model->cell = preg_replace('/[^0-9]/', '',utf8_encode($model->cell));
             $model->zip_code = preg_replace('/[^0-9]/', '',utf8_encode($model->zip_code));
 
             if ($model->save())
@@ -215,21 +217,21 @@ class CustomerController extends Controller
                         [
                             'attribute' => 'name',
                             'value' => function ($line) {
-                                return utf8_encode($line[0]);
+                                return utf8_encode($line[7]);
                             },
                         ],
                         //birthday
                         [
                             'attribute' => 'birthday',
                             'value' => function ($line) {
-                                return implode("-", array_reverse(explode("/", utf8_encode($line[1]))));
+                                return implode("-", array_reverse(explode("/", utf8_encode($line[8]))));
                             },
                         ],
                         //document
                         [
                             'attribute' => 'document',
                             'value' => function ($line) {
-                                return utf8_encode($line[2]);
+                                return utf8_encode($line[5]);
                             },
                             'unique' => true, //Will filter and import unique values only. can by applied for 1+ attributes
                         ],
@@ -237,120 +239,131 @@ class CustomerController extends Controller
                         [
                             'attribute' => 'agency',
                             'value' => function ($line) {
-                                return utf8_encode($line[3]);
+                                return utf8_encode($line[4]);
                             },
                         ],
                         //registry
                         [
                             'attribute' => 'registry',
                             'value' => function ($line) {
-                                return utf8_encode($line[4]);
+                                return utf8_encode($line[6]);
                             },
                         ],
                         //address
                         [
                             'attribute' => 'address',
                             'value' => function ($line) {
-                                return utf8_encode($line[5]);
+                                return utf8_encode($line[9]).', '.utf8_encode($line[10]);
                             },
                         ],
                         //complement
                         [
                             'attribute' => 'complement',
                             'value' => function ($line) {
-                                return utf8_encode($line[6]);
+                                return utf8_encode($line[11]);
                             },
                         ],
                         //zip_code
                         [
                             'attribute' => 'zip_code',
                             'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '', utf8_encode($line[7]));
+                                return preg_replace('/[^0-9]/', '', utf8_encode($line[15]));
                             },
                         ],
                         //neighbourhood
                         [
                             'attribute' => 'neighbourhood',
                             'value' => function ($line) {
-                                return utf8_encode($line[8]);
+                                return utf8_encode($line[12]);
                             },
                         ],
                         //city
                         [
                             'attribute' => 'city',
                             'value' => function ($line) {
-                                return utf8_encode($line[9]);
+                                return utf8_encode($line[13]);
                             },
                         ],
                         //state
                         [
                             'attribute' => 'state',
                             'value' => function ($line) {
-                                return utf8_encode($line[10]);
+                                return utf8_encode($line[14]);
                             },
                         ],
                         //phone1
                         [
                             'attribute' => 'phone1',
                             'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '',utf8_encode($line[11]));
+                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[16]).$line[17]));
                             },
                         ],
                         //phone2
                         [
                             'attribute' => 'phone2',
                             'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '',utf8_encode($line[12]));
+                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[18]).$line[19]));
                             },
                         ],
                         //phone3
                         [
                             'attribute' => 'phone3',
                             'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '',utf8_encode($line[13]));
+                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[20]).$line[21]));
+                            },
+                        ],
+                        //cell
+                        [
+                            'attribute' => 'cell',
+                            'value' => function ($line) {
+                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[22]).$line[23]));
                             },
                         ],
                         //mail
-                        [
+                        /*[
                             'attribute' => 'mail',
                             'value' => function ($line) {
                                 return utf8_encode($line[14]);
                             },
-                        ],
+                        ],*/
                         //customer_password
                         [
                             'attribute' => 'customer_password',
                             'value' => function ($line) {
-                                return utf8_encode($line[15]);
+                                return utf8_encode($line[25]);
                             },
                         ],
                         //observation
-                        [
+                        /*[
                             'attribute' => 'observation',
                             'value' => function ($line) {
                                 return utf8_encode($line[16]);
                             },
-                        ],
+                        ],*/
                         //telemarketing
-                        [
+                        /*[
                             'attribute' => 'telemarketing',
                             'value' => function ($line) {
                                 return utf8_encode($line[17]);
                             },
-                        ]
+                        ]*/
                     ],
                     'skipImport' => function ($line) {
-                        if (empty($line[0]) || $line[0] == "") {
+                        if (empty($line[7]) || $line[7] == "") {
+                            return true;
+                        }
+                        if (empty($line[8]) || $line[8] == "") {
                             return true;
                         }
 
-                        if (!empty($line[1])) {
-                            $model = Customer::findByDocument($line[1]);
+                        if (!empty($line[5])) {
+                            $model = Customer::findByDocument($line[5]);
                             if($model)
                                 return true;
                         }
                     }
                 ]));
+
 
                 $data = ['success' => true, 'msg' => $numberRowsAffected . ' Importados'/* rest of the data */];
 
@@ -364,4 +377,7 @@ class CustomerController extends Controller
         //throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
         return $data;
     }
+
+
+    public function teste(){}
 }

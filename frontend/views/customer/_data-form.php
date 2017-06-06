@@ -121,6 +121,19 @@ use yii\widgets\ActiveForm;
             </div>
 
             <div class="row">
+                <div class="col-sm-2">
+                    <?= $form->field($model, 'cell', ['template' =>
+                        '<div class="form-group">
+                    {label}
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        {input}
+                    </div>
+                </div>'
+                    ])->widget(\yii\widgets\MaskedInput::className(), array("mask" => "(99) 9999-9999[9]")); ?>
+                </div>
                 <div class="col-sm-4">
                     <?= $form->field($model, 'mail',['template' =>
                         '<div class="form-group">
@@ -134,9 +147,6 @@ use yii\widgets\ActiveForm;
                 </div>'
                     ])->textInput(['maxlength' => true]) ?>
                 </div>
-                <div class="col-sm-2">
-                    <?= $form->field($model, 'customer_password')->textInput(['maxlength' => true]) ?>
-                </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
@@ -146,6 +156,9 @@ use yii\widgets\ActiveForm;
             <div class="row">
                 <div class="col-sm-4">
                     <?= $form->field($model, 'telemarketing')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-sm-2">
+                    <?= $form->field($model, 'customer_password')->textInput(['maxlength' => true]) ?>
                 </div>
             </div>
             <div class="row">

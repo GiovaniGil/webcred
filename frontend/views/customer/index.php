@@ -77,14 +77,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             //'id',
-            'name',
+            'agency',
+            [
+                'attribute' => 'name',
+                'value' => function($model){
+                    return $model->name;
+                    //return explode(' ',$model->name)[0];
+                }
+            ],
             [
                 'attribute' => 'birthday',
                 'format' => ['date', DATE]
             ],
             'document',
             // 'registry',
-            'address',
+            //'address',
             // 'complement',
             // 'zip_code',
             // 'neighbourhood',

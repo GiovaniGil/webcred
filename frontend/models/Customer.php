@@ -11,7 +11,7 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property date $birthday
- * @property integer $document
+ * @property string $document
  * @property string $agency
  * @property string $registry
  * @property string $address
@@ -23,6 +23,7 @@ use Yii;
  * @property string $phone1
  * @property string $phone2
  * @property string $phone3
+ * @property string $cell
  * @property string $mail
  * @property string $customer_password
  * @property string $observation
@@ -48,11 +49,10 @@ class Customer extends \yii\db\ActiveRecord
         return [
             [['name', 'birthday'], 'required'],
             [['birthday'], 'safe'],
-            [['document'], 'integer'],
             [['observation'], 'string'],
             [['folder'], 'string'],
             [['file'], 'file'],
-            [['name', 'agency', 'registry', 'address', 'complement', 'zip_code', 'neighbourhood', 'city', 'state', 'phone1', 'phone2', 'phone3', 'mail', 'customer_password', 'telemarketing'], 'string', 'max' => 255],
+            [['name', 'document', 'agency', 'registry', 'address', 'complement', 'zip_code', 'neighbourhood', 'city', 'state', 'phone1', 'phone2','cell', 'phone3', 'mail', 'customer_password', 'telemarketing'], 'string', 'max' => 255],
         ];
     }
 
@@ -77,6 +77,7 @@ class Customer extends \yii\db\ActiveRecord
             'phone1' => Yii::t('frontend', 'Phone1'),
             'phone2' => Yii::t('frontend', 'Phone2'),
             'phone3' => Yii::t('frontend', 'Phone3'),
+            'cell' => Yii::t('frontend', 'Cell'),
             'mail' => Yii::t('frontend', 'Mail'),
             'customer_password' => Yii::t('frontend', 'Customer Password'),
             'observation' => Yii::t('frontend', 'Observation'),
