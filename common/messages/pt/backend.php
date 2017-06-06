@@ -18,7 +18,7 @@
  */
 return [
     'Delete' => 'Apagar',
-    'Actions' => '@@Ações@@',
+    'Actions' => 'Ações',
     'Create' => 'Criar',
     'Create User' => 'Cadastrar Usuário',
     'Customers' => 'Clientes',
