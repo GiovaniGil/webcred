@@ -239,7 +239,7 @@ class CustomerController extends Controller
                         [
                             'attribute' => 'agency',
                             'value' => function ($line) {
-                                return utf8_encode($line[4]);
+                                return utf8_encode($line[2]);
                             },
                         ],
                         //registry
