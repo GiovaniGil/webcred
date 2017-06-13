@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="input-group">
                 <label class="input-group-btn">
                     <span class="btn btn-primary" style="height: inherit;">
-                        Planilha&hellip; <input type="file" accept=".csv" id="excelSheet" name="excelSheet" style="display: none;" multiple>
+                        Planilha&hellip; <input type="file" accept=".csv" id="excelSheet" name="excelSheet" style="display: none;" >
                     </span>
                 </label>
                 <input type="text" id="excelSheetTxt" class="form-control" readonly>
