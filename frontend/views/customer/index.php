@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?PHP
 
     echo Alert::widget([
-            'options' => [
+        'options' => [
             'class' => 'alert-success',
             'style' => 'display:none',
             'id' => 'sheet-imported'
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
 
     echo Alert::widget([
-            'options' => [
+        'options' => [
             'class' => 'alert-danger',
             'style' => 'display:none',
             'id' => 'sheet-danger'
@@ -63,11 +63,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 <input type="text" id="excelSheetTxt" class="form-control" readonly>
                 <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Importar',
                     ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
-                </div>
+            </div>
         </div>
     </div>
     <?php ActiveForm::end(); ?>
-
+    <?php if(sizeof($fileChunks) > 0): ?>
+        <div class="row" id="rowFormChunk" style="padding-bottom: 30px">
+            <div class="col-lg-6 col-sm-6 col-6 col-sm-offset-8">
+                <?php $form = ActiveForm::begin(['id' => 'formChunk',
+                    'action' =>  urldecode(Yii::$app->urlManager->createUrl(['customer/import-chunks'])),
+                    'options' => ['method' => 'POST','enctype' => 'multipart/form-data']]) ?>
+                <?= Html::submitButton(Html::tag('i', '', ['class' => 'fa fa-upload']).' Ainda existem partes não importadas',
+                    ['class' => 'btn btn-default', 'style' => 'float:left; position:absolute; height:inherit']); ?>
+                <?php ActiveForm::end(); ?>
+            </div>
+        </div>
+    <?php endif; ?>
     </p>
 
     <?php Pjax::begin(['id' => 'pjax-grid-view']); ?>
@@ -179,34 +190,120 @@ a.desc:after {
 $script = <<< JS
      $(document).ready( function () {        
         
+        /*function upload(fileInputId, fileIndex, action)
+		{
+		//multipart/form-data;
+			// take the file from the input
+			var file = document.getElementById(fileInputId).files[fileIndex]; 
+			var reader = new FileReader();
+			reader.readAsBinaryString(file); // alternatively you can use readAsDataURL
+			
+			reader.onload = function(event) {
+			  alert('Load');
+			}
+			reader.onloadend  = function(evt)
+			{
+					// create XHR instance
+					xhr = new XMLHttpRequest();
+
+					// send the file through POST
+					xhr.open("POST", action, true);
+					var tokenCsrf = yii.getCsrfToken();
+					xhr.setRequestHeader("Cache-Control", "no-cache");
+                    xhr.setRequestHeader("Content-Type", "application/vnd.ms-excel");
+                    xhr.setRequestHeader("X-File-Type", file.type);
+                    xhr.setRequestHeader("X-Requested-With", 'XMLHttpRequest');
+                    xhr.setRequestHeader("X-CSRF-Token", tokenCsrf);
+                                                   
+					// make sure we have the sendAsBinary method on all browsers
+					XMLHttpRequest.prototype.mySendAsBinary = function(text){
+						var data = new ArrayBuffer(text.length);
+						var ui8a = new Uint8Array(data, 0);
+						for (var i = 0; i < text.length; i++) 
+						    ui8a[i] = (text.charCodeAt(i) & 0xff);
+			
+                        if(typeof window.Blob == "function")
+			            {
+			                 var blob = new Blob([data]);
+			            }else{
+			                 var bb = new (window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder)();
+			                 bb.append(data);
+			                 var blob = bb.getBlob();
+			            }
+
+                        var formData = new FormData();
+                        formData.append('_frontendCSRF', tokenCsrf);
+                        formData.append('myfile', encodeURIComponent(file));
+						xhr.send(formData);
+					}
+					
+					// let's track upload progress
+					var eventSource = xhr.upload || xhr;
+					eventSource.addEventListener("progress", function(e) {
+						// get percentage of how much of the current file has been sent
+						var position = e.position || e.loaded;
+						var total = e.totalSize || e.total;
+						var percentage = Math.round((position/total)*100);
+						
+						// here you should write your own code how you wish to proces this
+						alert(percentage);
+					});
+					
+					// state change observer - we need to know when and if the file was successfully uploaded
+					xhr.onreadystatechange = function()
+					{
+						if(xhr.readyState == 4)
+						{
+							if(xhr.status == 200)
+							{
+								// process success
+								alert('Sucesso');								
+							}else{
+								alert('Erro');
+							}
+						}
+					};
+					
+					 xhr.onerror = function () {
+                          alert("Error "+ xhr.statusText);
+                     };
+					// start sending
+					//xhr.mySendAsBinary(evt.target.result);
+			};
+		}*/
+        
+        
         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
         $.fn.datepicker.defaults.language = "pt-BR";
         $('input[name="CustomerSearch[birthday]"]').datepicker({});        
         
-        $( '#formSheet' ).on('beforeSubmit', function(e) {
+        $( '#formSheet, #formChunk' ).on('beforeSubmit', function(e) {
         
         $('#sheet-danger').hide();
         $('#sheet-imported').hide();
         
-        if($('#excelSheet').val() != ""){
+        if($('#excelSheet').val() != "" || $(this).attr('id') == 'formChunk'){
                 $(".overlay").show();
                 var form = $(this);
                 var formData = new FormData($(this)[0]);
-
+                var idForm = $(this).attr('id');
+                
                 $.ajax({
                 url: form.attr("action"),
                 type: form.attr("method"),
                 data: formData,
+                timeout: 0,
                 cache: false,
                 contentType: false,
                 processData: false,
                 success: function (data) {                       
-                     
                      setTimeout(function(){
                         $(".overlay").hide();
                         if(data.success){
                             $('#alert-text').text(data.msg);
                             $('#sheet-imported').show();
+                            if(idForm == 'formChunk')
+                                $('#rowFormChunk').hide();
                         }else{
                             $('#alert-danger').text(data.msg);
                             $('#sheet-danger').show();
@@ -218,12 +315,14 @@ $script = <<< JS
                       },3000);      
                       
                 },
-                error: function (exception) {
-                    alert('Error: '+exception);
+                error: function (exception) {                    
+                    console.log(exception);
                     $(".overlay").hide();
+                    location.reload();
                 }
             });
-        }}).on('submit', function(e){
+          }
+        }).on('submit', function(e){
             e.preventDefault();
         });
 });

@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\components\Notification;
 use ruskid\csvimporter\CSVImporter;
+use SplFileObject;
 use Yii;
 use frontend\models\Customer;
 use frontend\models\CustomerSearch;
@@ -33,6 +34,7 @@ class CustomerController extends Controller
                     'delete' => ['POST'],
                     'importSheet' => ['POST'],
                     'deleteFile' => ['POST'],
+                    'importChunks' => ['POST'],
                 ],
             ],
         ];
@@ -51,9 +53,12 @@ class CustomerController extends Controller
         $searchModel = new CustomerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $fileChunks = glob("*.csv");
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'fileChunks' => $fileChunks
         ]);
     }
 
@@ -193,191 +198,447 @@ class CustomerController extends Controller
         return $data;
     }
 
+
+    public function sliceFile($inputFile){
+        $outputFile = $inputFile['name'];
+
+        $splitSize = 500;
+
+        $in = fopen($inputFile['tmp_name'], 'r');
+
+        $rowCount = 0;
+        $fileCount = 1;
+        $out = null;
+        $header = null;
+        $files = [];
+
+        while (($line = fgetcsv($in, 0, ';', '"', '\\')) !== FALSE) {
+            if (($rowCount % $splitSize) == 0) {
+                if ($rowCount > 0) {
+                    fclose($out);
+                }
+                $fileChunkName = $outputFile . $fileCount++ . '.csv';
+                $out = fopen($fileChunkName, 'w');
+                array_push($files, $fileChunkName);
+                if($header != null)
+                    fputcsv($out, $header, ';');
+            }
+            if ($line){
+                if($rowCount == 0)
+                    $header = $line;
+                fputcsv($out, $line, ';');
+            }
+            $rowCount++;
+        }
+
+        fclose($out);
+        return $files;
+    }
+
     public function actionImportSheet(){
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data = [];
+        $numberRowsAffected = 0;
+
         if(Yii::$app->request->isAjax && isset($_FILES['excelSheet'])) {
 
-            try {
-                $excelSheet = $_FILES['excelSheet'];
-                $importer = new CSVImporter;
-                $importer->setData(new CSVReader([
-                    'filename' => $excelSheet["tmp_name"] /*Yii::$app->basePath."/controllers/teste.csv"*/,
-                    'fgetcsvOptions' => [
-                        'delimiter' => ';'
-                    ]
-                ]));
-
-                //Import multiple (Fast but not reliable). Will return number of inserted rows
-                $numberRowsAffected = $importer->importByReflection(new MultipleImportStrategy([
-                    'tableName' => Customer::tableName(),
-                    'className' => Customer::className(),
-                    'configs' => [
-                        //name
-                        [
-                            'attribute' => 'name',
-                            'value' => function ($line) {
-                                return utf8_encode($line[7]);
-                            },
-                        ],
-                        //birthday
-                        [
-                            'attribute' => 'birthday',
-                            'value' => function ($line) {
-                                return implode("-", array_reverse(explode("/", utf8_encode($line[8]))));
-                            },
-                        ],
-                        //document
-                        [
-                            'attribute' => 'document',
-                            'value' => function ($line) {
-                                return utf8_encode($line[5]);
-                            },
-                            'unique' => true, //Will filter and import unique values only. can by applied for 1+ attributes
-                        ],
-                        //agency
-                        [
-                            'attribute' => 'agency',
-                            'value' => function ($line) {
-                                return utf8_encode($line[2]);
-                            },
-                        ],
-                        //registry
-                        [
-                            'attribute' => 'registry',
-                            'value' => function ($line) {
-                                return utf8_encode($line[6]);
-                            },
-                        ],
-                        //address
-                        [
-                            'attribute' => 'address',
-                            'value' => function ($line) {
-                                return utf8_encode($line[9]).', '.utf8_encode($line[10]);
-                            },
-                        ],
-                        //complement
-                        [
-                            'attribute' => 'complement',
-                            'value' => function ($line) {
-                                return utf8_encode($line[11]);
-                            },
-                        ],
-                        //zip_code
-                        [
-                            'attribute' => 'zip_code',
-                            'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '', utf8_encode($line[15]));
-                            },
-                        ],
-                        //neighbourhood
-                        [
-                            'attribute' => 'neighbourhood',
-                            'value' => function ($line) {
-                                return utf8_encode($line[12]);
-                            },
-                        ],
-                        //city
-                        [
-                            'attribute' => 'city',
-                            'value' => function ($line) {
-                                return utf8_encode($line[13]);
-                            },
-                        ],
-                        //state
-                        [
-                            'attribute' => 'state',
-                            'value' => function ($line) {
-                                return utf8_encode($line[14]);
-                            },
-                        ],
-                        //phone1
-                        [
-                            'attribute' => 'phone1',
-                            'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[16]).$line[17]));
-                            },
-                        ],
-                        //phone2
-                        [
-                            'attribute' => 'phone2',
-                            'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[18]).$line[19]));
-                            },
-                        ],
-                        //phone3
-                        [
-                            'attribute' => 'phone3',
-                            'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[20]).$line[21]));
-                            },
-                        ],
-                        //cell
-                        [
-                            'attribute' => 'cell',
-                            'value' => function ($line) {
-                                return preg_replace('/[^0-9]/', '',utf8_encode(utf8_encode($line[22]).$line[23]));
-                            },
-                        ],
-                        //mail
-                        /*[
-                            'attribute' => 'mail',
-                            'value' => function ($line) {
-                                return utf8_encode($line[14]);
-                            },
-                        ],*/
-                        //customer_password
-                        [
-                            'attribute' => 'customer_password',
-                            'value' => function ($line) {
-                                return utf8_encode($line[25]);
-                            },
-                        ],
-                        //observation
-                        /*[
-                            'attribute' => 'observation',
-                            'value' => function ($line) {
-                                return utf8_encode($line[16]);
-                            },
-                        ],*/
-                        //telemarketing
-                        /*[
-                            'attribute' => 'telemarketing',
-                            'value' => function ($line) {
-                                return utf8_encode($line[17]);
-                            },
-                        ]*/
-                    ],
-                    'skipImport' => function ($line) {
-                        if (empty($line[7]) || $line[7] == "") {
-                            return true;
-                        }
-                        if (empty($line[8]) || $line[8] == "") {
-                            return true;
-                        }
-
-                        if (!empty($line[5])) {
-                            $model = Customer::findByDocument($line[5]);
-                            if($model)
-                                return true;
-                        }
-                    }
-                ]));
-
-
-                $data = ['success' => true, 'msg' => $numberRowsAffected . ' Importados'/* rest of the data */];
-
-            }catch (Exception $ex){
-                $data = ['success' => false, 'msg' => 'Erro na importação do arquivo'];
-            }
+            $fileChunks = $this->sliceFile($_FILES['excelSheet']);
+            $numberRowsAffected = $this->processChunk($fileChunks);
+            $data = ['success' => true, 'msg' => $numberRowsAffected . ' Importados'];
         }
         else
-            $data = ['success' => false, 'msg' => 'Erro na importação do arquivo'];
+            $data = ['success' => false, 'msg' => 'Requisição incorreta.'];
 
-        //throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
         return $data;
     }
 
+    public function actionImportChunks(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = [];
+        $numberRowsAffected = 0;
 
-    public function teste(){}
+        $fileChunks =  $fileChunks = glob("*.csv");
+        if(Yii::$app->request->isAjax && sizeof($fileChunks) > 0) {
+            $numberRowsAffected = $this->processChunk($fileChunks);
+            $data = ['success' => true, 'msg' => $numberRowsAffected . ' Importados'];
+        }
+        else
+            $data = ['success' => false, 'msg' => 'Requisição incorreta.'];
+
+        return $data;
+    }
+
+    public function processChunk($fileChunks){
+
+        $numberRowsAffected = 0;
+        foreach ($fileChunks as $fil) {
+            if(file_exists($fil)) {
+
+                try {
+                    $importer = new CSVImporter;
+                    $importer->setData(new CSVReader([
+                        'filename' => $fil /*Yii::$app->basePath."/controllers/teste.csv"*/,
+                        'fgetcsvOptions' => [
+                            'delimiter' => ';'
+                        ]
+                    ]));
+
+                    //Import multiple (Fast but not reliable). Will return number of inserted rows
+                    $numberRowsAffected += $importer->import(new MultipleImportStrategy([
+                        'tableName' => Customer::tableName(),
+                        'className' => Customer::className(),
+                        'configs' => [
+                            //name
+                            [
+                                'attribute' => 'name',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[7]);
+                                },
+                            ],
+                            //birthday
+                            [
+                                'attribute' => 'birthday',
+                                'value' => function ($line) {
+                                    return implode("-", array_reverse(explode("/", utf8_encode($line[8]))));
+                                },
+                            ],
+                            //document
+                            [
+                                'attribute' => 'document',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[5]);
+                                },
+                                //'unique' => true, //Will filter and import unique values only. can by applied for 1+ attributes
+                            ],
+                            //agency
+                            [
+                                'attribute' => 'agency',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[2]);
+                                },
+                            ],
+                            //registry
+                            [
+                                'attribute' => 'registry',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[6]);
+                                },
+                            ],
+                            //address
+                            [
+                                'attribute' => 'address',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[9]) . ', ' . utf8_encode($line[10]);
+                                },
+                            ],
+                            //complement
+                            [
+                                'attribute' => 'complement',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[11]);
+                                },
+                            ],
+                            //zip_code
+                            [
+                                'attribute' => 'zip_code',
+                                'value' => function ($line) {
+                                    return preg_replace('/[^0-9]/', '', utf8_encode($line[15]));
+                                },
+                            ],
+                            //neighbourhood
+                            [
+                                'attribute' => 'neighbourhood',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[12]);
+                                },
+                            ],
+                            //city
+                            [
+                                'attribute' => 'city',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[13]);
+                                },
+                            ],
+                            //state
+                            [
+                                'attribute' => 'state',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[14]);
+                                },
+                            ],
+                            //phone1
+                            [
+                                'attribute' => 'phone1',
+                                'value' => function ($line) {
+                                    return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[16]) . $line[17]));
+                                },
+                            ],
+                            //phone2
+                            [
+                                'attribute' => 'phone2',
+                                'value' => function ($line) {
+                                    return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[18]) . $line[19]));
+                                },
+                            ],
+                            //phone3
+                            [
+                                'attribute' => 'phone3',
+                                'value' => function ($line) {
+                                    return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[20]) . $line[21]));
+                                },
+                            ],
+                            //cell
+                            [
+                                'attribute' => 'cell',
+                                'value' => function ($line) {
+                                    return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[22]) . $line[23]));
+                                },
+                            ],
+                            //mail
+                            /*[
+                                'attribute' => 'mail',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[14]);
+                                },
+                            ],*/
+                            //customer_password
+                            [
+                                'attribute' => 'customer_password',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[25]);
+                                },
+                            ],
+                            //observation
+                            /*[
+                                'attribute' => 'observation',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[16]);
+                                },
+                            ],*/
+                            //telemarketing
+                            /*[
+                                'attribute' => 'telemarketing',
+                                'value' => function ($line) {
+                                    return utf8_encode($line[17]);
+                                },
+                            ]*/
+                        ],
+                        'skipImport' => function ($line) {
+                            if (empty($line[7]) || $line[7] == "") {
+                                return true;
+                            }
+                            if (empty($line[8]) || $line[8] == "") {
+                                return true;
+                            }
+
+                            if (!empty($line[5])) {
+                                $model = Customer::findByDocument($line[5]);
+                                if ($model)
+                                    return true;
+                            }
+                        }
+                    ]));
+
+
+                    unlink($fil);
+
+                } catch (Exception $ex) {
+                    $data = ['success' => false, 'msg' => 'Erro na importação do arquivo'];
+                }
+            }
+        }
+        return $numberRowsAffected;
+    }
+
+    public function beforeAction($action) {
+        if($action->id == 'index')
+            $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
+    /* public function actionImportSheet(){
+         Yii::$app->response->format = Response::FORMAT_JSON;
+         $data = [];
+
+         if(Yii::$app->request->isAjax && isset($_FILES['excelSheet'])) {
+
+             try {
+                 $excelSheet = $_FILES['excelSheet'];
+
+                 $temp = $_FILES["excelSheet"]["temp_name"];
+                 $name = $_FILES["excelSheet"]["name"];
+
+                 move_uploaded_file($temp, Yii::$app->basePath."/controllers/".$name);
+
+                 $fp = new SplFileObject($excelSheet["tmp_name"], 'r');
+                 $fp->seek(PHP_INT_MAX);
+                 $total = $fp->key() + 1;
+                 $fp->rewind();
+
+                 $numberRowsAffected = 0;
+                 $chunks = 501;
+                 $completeLinesArray = null;
+                 for($cont = 1; $cont < $total; $cont = ( ($cont+$chunks) > $total ? $total : ($cont+$chunks))) {
+
+                     $importer = new CSVImporter;
+                     $csvReader = new CSVReader([
+                         'filename' => Yii::$app->basePath."/controllers/".$name,
+                         'fgetcsvOptions' => [
+                             'delimiter' => ';',
+                             'startFromLine' => $cont,
+                             'stopOnLine' => $chunks,
+                             'completeLinesArray' => $completeLinesArray
+                         ]
+                     ]);
+                     $importer->setData($csvReader);
+                     $completeLinesArray = $csvReader->getCompleteLinesArray();
+
+                     //Import multiple (Fast but not reliable). Will return number of inserted rows
+                     $numberRowsAffected += $importer->importByReflection(new MultipleImportStrategy([
+                         'tableName' => Customer::tableName(),
+                         'className' => Customer::className(),
+                         'configs' => [
+                             //name
+                             [
+                                 'attribute' => 'name',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[7]);
+                                 },
+                             ],
+                             //birthday
+                             [
+                                 'attribute' => 'birthday',
+                                 'value' => function ($line) {
+                                     return implode("-", array_reverse(explode("/", utf8_encode($line[8]))));
+                                 },
+                             ],
+                             //document
+                             [
+                                 'attribute' => 'document',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[5]);
+                                 },
+                                 'unique' => true, //Will filter and import unique values only. can by applied for 1+ attributes
+                             ],
+                             //agency
+                             [
+                                 'attribute' => 'agency',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[2]);
+                                 },
+                             ],
+                             //registry
+                             [
+                                 'attribute' => 'registry',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[6]);
+                                 },
+                             ],
+                             //address
+                             [
+                                 'attribute' => 'address',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[9]) . ', ' . utf8_encode($line[10]);
+                                 },
+                             ],
+                             //complement
+                             [
+                                 'attribute' => 'complement',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[11]);
+                                 },
+                             ],
+                             //zip_code
+                             [
+                                 'attribute' => 'zip_code',
+                                 'value' => function ($line) {
+                                     return preg_replace('/[^0-9]/', '', utf8_encode($line[15]));
+                                 },
+                             ],
+                             //neighbourhood
+                             [
+                                 'attribute' => 'neighbourhood',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[12]);
+                                 },
+                             ],
+                             //city
+                             [
+                                 'attribute' => 'city',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[13]);
+                                 },
+                             ],
+                             //state
+                             [
+                                 'attribute' => 'state',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[14]);
+                                 },
+                             ],
+                             //phone1
+                             [
+                                 'attribute' => 'phone1',
+                                 'value' => function ($line) {
+                                     return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[16]) . $line[17]));
+                                 },
+                             ],
+                             //phone2
+                             [
+                                 'attribute' => 'phone2',
+                                 'value' => function ($line) {
+                                     return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[18]) . $line[19]));
+                                 },
+                             ],
+                             //phone3
+                             [
+                                 'attribute' => 'phone3',
+                                 'value' => function ($line) {
+                                     return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[20]) . $line[21]));
+                                 },
+                             ],
+                             //cell
+                             [
+                                 'attribute' => 'cell',
+                                 'value' => function ($line) {
+                                     return preg_replace('/[^0-9]/', '', utf8_encode(utf8_encode($line[22]) . $line[23]));
+                                 },
+                             ],
+                             //customer_password
+                             [
+                                 'attribute' => 'customer_password',
+                                 'value' => function ($line) {
+                                     return utf8_encode($line[25]);
+                                 },
+                             ],
+                         ],
+                         'skipImport' => function ($line) {
+                             if (empty($line[7]) || $line[7] == "") {
+                                 return true;
+                             }
+                             if (empty($line[8]) || $line[8] == "") {
+                                 return true;
+                             }
+
+                             if (!empty($line[5])) {
+                                 $model = Customer::findByDocument($line[5]);
+                                 if ($model)
+                                     return true;
+                             }
+                         }
+                     ]));
+                 }
+
+                 $data = ['success' => true, 'msg' => $numberRowsAffected . ' Importados'];
+
+             }catch (Exception $ex){
+                 $data = ['success' => false, 'msg' => 'Erro na importação do arquivo'];
+             }
+         }
+         else
+             $data = ['success' => false, 'msg' => 'Erro na importação do arquivo'];
+
+         //throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+         return $data;
+     }*/
 }
